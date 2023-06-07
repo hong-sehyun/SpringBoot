@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rubypaper.domain.BoardVO;
@@ -78,5 +80,18 @@ public class BoardController { // extends HttpServlet같은거 사용안함 어�
 
 		return getBoardList;
 		
+	}
+//	@GetMapping("/board")
+//	public BoardVO board(@RequestBody BoardVO b) {
+//		b.setCreateDate(new Date());
+//		System.out.println("board : " + b);
+//		return b;
+//	}
+	@ResponseBody
+	@GetMapping("/board")
+	public BoardVO board(BoardVO b) {
+		b.setCreateDate(new Date());
+		System.out.println("board : " + b);
+		return b;
 	}
 }
