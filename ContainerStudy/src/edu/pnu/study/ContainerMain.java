@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
-import edu.pnu.study.operator.MyOperatorContainer;
+import edu.pnu.study.operator.MyOperatorContainer2;
 
 public class ContainerMain {
 
@@ -12,19 +12,24 @@ public class ContainerMain {
 	private volatile boolean threadCheck = true;
 	// Operator 문자열 저장 배열
 	private ArrayList<String> list = new ArrayList<>(Arrays.asList("+", "-", "*", "/"));
-	private MyOperatorContainer moc = new MyOperatorContainer();
+	
+	private MyOperatorContainer2 moc = new MyOperatorContainer2();
 
+	
 	public static void main(String[] args) {
 		ContainerMain cm = new ContainerMain();
 
 		// 일정 시간동안 사용되지 않고 있는 Operator 객체를 제거하는 Thread
+		// ↓ Thread 객체 생성
 //		Thread th = new Thread(() -> {
-//			MyOperatorContainer moc = cm.getContainer();
+//			MyOperatorContainer2 moc = cm.getContainer();
 //
 //			// 메인 Thread가 종료하면 같이 종료되도록 종료 조건 변수(threadCheck)를 확인한다.
 //			while(cm.getThreadCheck()) {
-//				// 생존 기준 시간인 millisecond를 넘겨서 사용되지 않은 객체는 제거한다.
-//				moc.releaseOldObject(10000);
+//				System.out.println("container size : "+moc.getOperatorSize());
+//				// 생존 기준 시간인 millisecond를 넘겨서 사용되지 않은 객체는 제거한다. 연산자의 생존주기를 관리
+//				//15초 이내 결과가 나오지 않으면 넘어감.이렇게 하면 cpu점유율이 떨어짐
+//				moc.releaseOldObject(15000);
 //				
 //				try {
 //					Thread.sleep(1000);
@@ -45,7 +50,7 @@ public class ContainerMain {
 		System.out.println("프로그램을 종료합니다.");
 	}
 	
-	public MyOperatorContainer getContainer() {
+	public MyOperatorContainer2 getContainer() {
 		return moc;
 	}
 	
