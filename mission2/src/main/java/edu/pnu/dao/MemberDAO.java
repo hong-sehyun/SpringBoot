@@ -102,7 +102,7 @@ public class MemberDAO {
 	public int updateMember(Member member) {
 		try {
 			Statement st = con.createStatement();
-			int ret = st.executeUpdate(String.format("update member set pass='%s', name='%s' where id=%d", member.getPass(), member.getName()));
+			int ret = st.executeUpdate(String.format("update member set pass='%s', name='%s' where id=%d", member.getPass(), member.getName(), member.getId()));
 			st.close();
 
 			return ret;
