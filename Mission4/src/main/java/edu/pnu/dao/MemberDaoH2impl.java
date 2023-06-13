@@ -60,8 +60,6 @@ public class MemberDaoH2impl {
 		Statement st = con.createStatement();
 		ResultSet rs = st.executeQuery(String.format("select*from member order by id"));
 		
-		
-		
 		while(rs.next()) {
 		list.add(MemberVO.builder()
 				.id(rs.getInt("id"))
@@ -87,8 +85,16 @@ public class MemberDaoH2impl {
 		try {
 			Statement st = con.createStatement();
 			st.executeUpdate(String.format("insert into member(pass, name) values ('%s','%s')", member.getPass(), member.getName()));
-			st.close();
-						
+			
+//			for(int i = 1; i <= 10; i++) {
+//				member.setName("name" + i);
+//				member.setPass("pass"+i);
+//			
+//			st.close();
+//						
+//			return member;
+//			}
+			st.close();			
 			return member;
 			
 			} catch (Exception e) {
