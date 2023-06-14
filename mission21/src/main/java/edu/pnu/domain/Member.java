@@ -15,10 +15,9 @@ import lombok.ToString;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LogVO {
-	private int id;
-	private String method;
-	private String sqlstring;
+public class Member {
+	private long id;
+	private String pass ;
+	private String name  ;
 	private Date regidate;
-	private boolean success;
 }

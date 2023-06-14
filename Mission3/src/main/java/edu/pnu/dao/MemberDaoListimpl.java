@@ -33,7 +33,7 @@ public class MemberDaoListimpl implements MemberInterface {
 	public MemberVO addMember(MemberVO member) {
 		member.setId(list.size() + 1);
 		member.setRegidate(new Date());
-		list.add(member);
+//		list.add(member);
 		return member;
 	}
 	@Override

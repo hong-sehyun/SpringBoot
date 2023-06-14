@@ -1,8 +1,11 @@
 package edu.pnu.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,75 +58,116 @@ public class MemberDaoH2impl {
 	}
 	
 	public List<MemberVO> getMembers() {
+		Statement st = null;
+		ResultSet rs = null;
 		List<MemberVO> list = new ArrayList<>();
 		try {
-		Statement st = con.createStatement();
-		ResultSet rs = st.executeQuery(String.format("select*from member order by id"));
-		
-		
-		
-		while(rs.next()) {
-		list.add(MemberVO.builder()
-				.id(rs.getInt("id"))
-				.pass(rs.getString("pass"))
-				.name(rs.getString("name"))
-				.regidate(rs.getDate("regidate"))
-				.build());
-		}
-		
-		rs.close();
-		st.close();
-		
-		return list;
-		
+			st = con.createStatement();
+			rs = st.executeQuery("select * from member order by id asc");
+			while(rs.next() ) {
+				MemberVO m = new MemberVO();
+				m.setId(rs.getInt("id"));
+				m.setPass(rs.getString("pass"));
+				m.setName(rs.getString("name"));
+				m.setRegidate(rs.getDate("regidate"));
+				list.add(m);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		}	
+		} finally {
+			try {
+				rs.close();
+				st.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return list;
+	}
+	
+	private int getNextId() {
+		Statement st = null;
+		ResultSet rs = null;
+		try {
+			st = con.createStatement();
+			rs = st.executeQuery("select max(id) from member");
+			rs.next();
+			return rs.getInt(1) + 1;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				rs.close();
+				st.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return 1;		
+	}
+	public MemberVO addMember(MemberVO member) {
+		int id = getNextId();
 		
+		PreparedStatement st = null;
+		try {
+			st = con.prepareStatement("insert into member (id,name,pass,regidate) values (?,?,?,?)");
+			st.setInt(1, id);
+			st.setString(2, member.getName());
+			st.setString(3, member.getPass());
+			st.setDate(4, new Date(System.currentTimeMillis()));
+			st.executeUpdate();
+
+			return getMember(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				st.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 		return null;
 	}
 	
-	public MemberVO addMember(MemberVO member) {
-		try {
-			Statement st = con.createStatement();
-			st.executeUpdate(String.format("insert into member(pass, name) values ('%s','%s')", member.getPass(), member.getName()));
-			st.close();
-						
-			return member;
-			
-			} catch (Exception e) {
-				e.printStackTrace();
-			}	
-		return member;
-	}
-	
 	public MemberVO updateMember(MemberVO member) {
+		PreparedStatement st = null;
 		try {
-			Statement st = con.createStatement();
-			st.executeUpdate(String.format("update member set pass='%s', name='%s' where id=%d", member.getPass(), member.getName(), member.getId()));
-			st.close();
+			st = con.prepareStatement("update member set name=?,pass=? where id=?");
+			st.setString(1, member.getName());
+			st.setString(2, member.getPass());
+			st.setInt(3, member.getId());
+			st.executeUpdate();
 
-			return member;
-			
-			} catch (Exception e) {
+			return getMember(member.getId());
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				st.close();
+			} catch (SQLException e) {
 				e.printStackTrace();
-			}	
-		return member;
+			}
+		}
+		return null;
 	
 	}
 	
 	public int deleteMember(int id) {
-		
+		PreparedStatement st = null;
 		try {
-			Statement st = con.createStatement();
-			int ret = st.executeUpdate(String.format("delete member where id=%d", id));
-			st.close();
-
-			return ret;
-			
-			} catch (Exception e) {
+			st = con.prepareStatement("delete from member where id=?");
+			st.setInt(1, id);
+			return st.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				st.close();
+			} catch (SQLException e) {
 				e.printStackTrace();
-			}	
+			}
+		}
 		return 0;
 		
 	}
