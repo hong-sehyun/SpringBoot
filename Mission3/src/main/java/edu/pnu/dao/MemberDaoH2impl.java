@@ -12,7 +12,7 @@ import java.util.List;
 
 import edu.pnu.domain.MemberVO;
 
-public class MemberDaoH2impl {
+public class MemberDaoH2impl implements MemberInterface {
 	private String driver = "org.h2.Driver";
 	private String url = "jdbc:h2:tcp://localhost/~/mission3";
 	private String username = "scott";

@@ -1,7 +1,7 @@
 package edu.pnu.service;
 
 import java.util.List;
-
+import edu.pnu.dao.MemberDaoH2impl;
 import edu.pnu.dao.MemberDaoListimpl;
 import edu.pnu.dao.MemberInterface;
 import edu.pnu.domain.MemberVO;
@@ -11,7 +11,9 @@ public class MemberService {
 	private MemberInterface memberDao;
 	
 	public MemberService() {
-		memberDao = new MemberDaoListimpl();		
+//		memberDao = new MemberDaoListimpl();		
+		memberDao = new MemberDaoH2impl();		
+
 	}
 	
 	public MemberVO getMember(int id)  {
