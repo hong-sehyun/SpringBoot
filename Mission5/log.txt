@@ -1,1 +1,5 @@
 get,select * from member where id=1,true
+get,select * from member order by id asc,true
+post,insert into member (id,name,pass,regidate) values (34,'null','null','2023-06-14'),true
+post,insert into member (id,name,pass,regidate) values (35,'name4','pass4','2023-06-14'),true
+post,insert into member (id,name,pass,regidate) values (36,'name5','pass5','2023-06-14'),true

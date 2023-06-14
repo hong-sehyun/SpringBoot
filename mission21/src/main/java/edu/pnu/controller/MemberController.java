@@ -19,19 +19,19 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequiredArgsConstructor //4번
 public class MemberController {
-	//1번 방법 필드에서 설정하는 방법
+	// 1번 방법 필드에서 설정하는 방법
 //	@Autowired
-	//4번 private MemberService memberService; 에 final을 붙여서 사용. lombok 어노테이션을 이용한 방법
+	// 4번 private MemberService memberService; 에 final을 붙여서 사용. lombok 어노테이션을 이용한 방법
 	private final MemberService memberService;
 	
-	//2번 생성자에서 설정하는 방법
+	// 2번 생성자에서 설정하는 방법
 //	@Autowired
 //	public MemberController() {
 //
 //		this.memberService = memberService;
 //	}
 	
-//	// 3번 setter를 이용한 방법
+	// 3번 setter를 이용한 방법
 //	@Autowired
 //	private void setMemberService(MemberService memberService) {
 //		this.memberService = memberService;
