@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.pnu.dao.log.LogDao;
-import edu.pnu.dao.log.LogDaoFileImpl;
+import edu.pnu.dao.log.LogDaoH2Impl;
 import edu.pnu.dao.member.MemberDaoH2Impl;
 import edu.pnu.dao.member.MemberInterface;
 import edu.pnu.domain.MemberVO;
@@ -19,8 +19,8 @@ public class MemberService {
 		memberDao = new MemberDaoH2Impl();
 		//memberDao = new MemberDaoListImpl();
 		
-		//logDao = new LogDaoH2Impl();
-		logDao = new LogDaoFileImpl();
+		logDao = new LogDaoH2Impl();
+//		logDao = new LogDaoFileImpl();
 	}
 	
 	@SuppressWarnings("unchecked")

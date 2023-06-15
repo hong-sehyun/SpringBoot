@@ -15,19 +15,28 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.pnu.domain.MemberVO;
 import edu.pnu.service.MemberService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
+@RequiredArgsConstructor
 public class MemberController {
 
-	private MemberService memberService;
-	
+//	@Autowired
+//	private MemberService memberService;
+	private final MemberService memberService;
 	private static final Logger log = LoggerFactory.getLogger(MemberController.class);
 	
-	@Autowired
-	public MemberController(MemberService memberService) {
-//		log.info("MemberController() 생성자가 호출됨.");
-//		memberService = new MemberService();
-		this.memberService = memberService;
+//	@Autowired
+//	public void setMemberService(MemberService memberService) {
+//		this.memberService = memberService;
+//	}
+	
+
+	public MemberController() {
+		log.info("MemberController() 생성자가 호출됨.");
+		memberService = new MemberService();
 	}
 	
 	@GetMapping("/member")
@@ -62,7 +71,7 @@ public class MemberController {
 	
 	@DeleteMapping("/member/{id}")
 	public MemberVO deleteMember(@PathVariable Integer id) {
-		log.info(String.format("MemberController - deleteMember(%ㅇ)가 호출됨.", id));
+		log.info(String.format("MemberController - deleteMember(%d)가 호출됨.", id));
 		return memberService.deleteMember(id);
 	}
 }

@@ -16,28 +16,20 @@ import edu.pnu.dao.member.MemberInterface;
 import edu.pnu.domain.MemberVO;
 
 
-@Service
+
 public class MemberService {
 
-	@Autowired
 	private MemberInterface memberDao;
-
-	@Autowired
 	private LogDao logDao;
 
-//	public MemberService() {
-//		memberDao = new MemberDaoH2Impl();
-////		memberDao = new MemberDaoListImpl();
-////		
-//		logDao = new LogDaoH2Impl();
-////		logDao = new LogDaoFileImpl();
-//	}
-	
-	@Autowired
-	public MemberService(MemberInterface memberDao, LogDao logDao) {
-		this.memberDao = memberDao;
-		this.logDao = logDao;
+	public MemberService() {
+		memberDao = new MemberDaoH2Impl();	
+		logDao = new LogDaoH2Impl();
+		
+//		logDao = new LogDaoFileImpl();
+//		memberDao = new MemberDaoListImpl();
 	}
+
 	
 	@SuppressWarnings("unchecked")
 	public List<MemberVO> getMembers() {

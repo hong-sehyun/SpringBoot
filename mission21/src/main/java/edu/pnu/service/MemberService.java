@@ -21,11 +21,11 @@ public class MemberService {
 	public Member getMember(long id)  {
 		return memberDAO.getMember(id);
 	}
+	
 	public List<Member> getMembers()  {
-
 		return memberDAO.getMembers();
-
 	}
+	
 	public int updateMember(Member member)  {
 		return memberDAO.updateMember(member);
 	}
