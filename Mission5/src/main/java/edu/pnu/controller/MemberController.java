@@ -20,24 +20,28 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class MemberController {
 
 //	@Autowired
-//	private MemberService memberService;
-	private final MemberService memberService;
+	private MemberService memberService;
+//	private final MemberService memberService;
 	private static final Logger log = LoggerFactory.getLogger(MemberController.class);
 	
 //	@Autowired
 //	public void setMemberService(MemberService memberService) {
 //		this.memberService = memberService;
 //	}
-	
-
-	public MemberController() {
+	@Autowired
+	public MemberController(MemberService memberService) {
 		log.info("MemberController() 생성자가 호출됨.");
-		memberService = new MemberService();
+		this.memberService = memberService;
 	}
+
+//	public MemberController() {
+//		log.info("MemberController() 생성자가 호출됨.");
+//		memberService = new MemberService();
+//	}
 	
 	@GetMapping("/member")
 	public List<MemberVO> getMembers() {

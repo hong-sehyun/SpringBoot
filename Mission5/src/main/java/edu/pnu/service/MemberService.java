@@ -16,7 +16,7 @@ import edu.pnu.dao.member.MemberInterface;
 import edu.pnu.domain.MemberVO;
 
 
-
+@Service
 public class MemberService {
 
 	private MemberInterface memberDao;
