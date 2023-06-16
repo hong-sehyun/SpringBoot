@@ -30,6 +30,8 @@ public class JPAClient {
 //		tx.commit();
 		
 		insertData(em);
+//		updateData(em);
+//		deleteData(em);
 		
 		em.close();
 		emf.close();
@@ -57,5 +59,36 @@ public class JPAClient {
 		}
 		
 	}
+	
+//	private static void updateData(EntityManager em) {
+//		
+//
+//		Board b = em.find(Board.class, 5L);
+//		b.setTitle("나는 새로운 타이틀");
+//		
+//		EntityTransaction tx = em.getTransaction();
+//		try {
+//			tx.begin();
+//			em.persist(b);			
+//			tx.commit();
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//			tx.rollback();
+//		}
+//	}
+//	
+//	private static void deleteData(EntityManager em) {
+//		
+//		Board b = em.find(Board.class, 9L);
+//		EntityTransaction tx = em.getTransaction();
+//		try {
+//			tx.begin();
+//			em.remove(b);			
+//			tx.commit();
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//			tx.rollback();
+//		}
+//	}
 
 }
