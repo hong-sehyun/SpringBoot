@@ -6,10 +6,12 @@ import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.stereotype.Component;
 
 import edu.pnu.domain.Board;
 import edu.pnu.persistence.BoardRepository;
 
+//@Component
 public class BoardDatainitializer implements ApplicationRunner{
 	
 	@Autowired
