@@ -1,6 +1,7 @@
 package edu.pnu.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
@@ -10,5 +11,16 @@ public class TestController {
 	public String home() {
 		//WEB-INF/board/home.jsp 호출
 		return "home";
+	}
+	
+	@GetMapping("/home1")
+	public void home1() {
+		//WEB-INF/board/home.jsp 호출
+	}
+	
+	@GetMapping("/model")
+	public String model(Model model) {
+		model.addAttribute("data", "홍길동");
+		return "model";
 	}
 }
