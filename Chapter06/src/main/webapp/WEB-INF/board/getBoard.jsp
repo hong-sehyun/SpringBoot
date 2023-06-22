@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8"%>    pageEncoding="EUC-KR"%>
+<%@ page contentType="text/html; charset=UTF-8"%> 
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
@@ -23,12 +23,14 @@
 		<td align="left">${board.writer }</td>
 	</tr>
 	<tr>
-		<td bgcolor="orange">내용</td><td align="left">
-		<textarea name="content" cols="40" rows="10"${board.content }></textarea></td>
+		<td bgcolor="orange">내용</td>
+		<td align="left"><textarea name="content" cols="40" rows="10">
+		${board.content }</textarea></td>
 	</tr>
 	<tr>
-		<td bgcolor="orange">등록일</td><td align="left">
-		<td><fmt:formatDate value="${board.createDate }" pattern="yyy-MM-dd"></fmt:formatDate></td>
+		<td bgcolor="orange">등록일</td>
+		<td align="left"><fmt:formatDate value="${board.createDate }" 
+		pattern="yyyy-MM-dd"></fmt:formatDate></td>
 	</tr>
 	<tr>
 		<td bgcolor="orange">조회수</td><td align="left">
@@ -41,7 +43,7 @@
 </table>
 </form>
 <hr>
-<a href="insertBoard">글등록</a>&nbsp;&nbsp;&nbsp;
+<a href="insertBoardView">글등록</a>&nbsp;&nbsp;&nbsp;
 <a href="deleteBoard?seq=${board.seq }">글삭제</a>&nbsp;&nbsp;&nbsp;
 <a href="getBoardList">글목록</a>
 </center>

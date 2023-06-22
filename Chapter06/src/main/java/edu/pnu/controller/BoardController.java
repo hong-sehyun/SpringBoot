@@ -32,20 +32,25 @@ public class BoardController {
 	
 	@Autowired
 	private BoardServiceImpl boardService;
+	
 	@GetMapping("/getBoardList")
 	public String getBoardList(Model model) {
 		model.addAttribute("boardList", boardService.getBoardList());
 		return "getBoardList";
 	}
 	
+//	@GetMapping("/insertBoard")
+//	public String insertBoard(Board board) {
+//		boardService.insertBoard(board);
+//		return "insertBoard";
+//	}
 	@GetMapping("/insertBoard")
-	public String insertBoard(Board board) {
-		boardService.insertBoard(board);
+	public String insertBoardView() {
 		return "insertBoard";
 	}
 	
 	@PostMapping("/insertBoard")
-	public String insertBoardPost(Board board) {
+	public String insertBoard(Board board) {
 		boardService.insertBoard(board);
 		return "redirect:getBoardList";
 	}
@@ -55,5 +60,16 @@ public class BoardController {
 		Board board = boardService.getBoard(Board.builder().seq(seq).build());
 		model.addAttribute("Board", board);
 		return "getBoard";
+	}
+	
+	@PostMapping("/updateBoard")
+	public String updateBoard(Board board) {
+		boardService.updateBoard(board);
+		return "forward:getBoardList";
+	}
+	
+	public String deleteBoard(Board board) {
+		boardService.deleteBoard(board);
+		return "forward:getBoardList";
 	}
 }
