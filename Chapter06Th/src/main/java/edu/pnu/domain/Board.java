@@ -30,7 +30,7 @@ public class Board {
 	private String writer;
 	private String content;
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date createDate;
-	private Long cnt;
+	private Date createDate=new Date();
+	private Long cnt=0L;
 
 }
