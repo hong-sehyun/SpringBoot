@@ -11,6 +11,7 @@
 <body>
 <center>
 <h1>게시글 목록</h1>
+
 <table border="1" cellpadding="0" cellspacing="0" width="700">
 <tr>
 	<th bgcolor="orange" width="100">번호</th>
