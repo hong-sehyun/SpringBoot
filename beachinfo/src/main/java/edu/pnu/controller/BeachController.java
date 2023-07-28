@@ -22,7 +22,7 @@ public class BeachController {
         this.beachService = beachService;
     }
 
-//    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/beaches")
     public Beach addBeachInfo(@RequestBody Beach beach) {
         return beachService.saveBeachInfo(beach);
