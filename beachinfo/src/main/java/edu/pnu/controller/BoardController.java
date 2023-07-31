@@ -26,12 +26,6 @@ public class BoardController {
     public List<Board> getAllBoardList() {
         return boardService.getAllBoardList();
     }
-//    @GetMapping
-//    public String boardList(Model model) {
-//        List<Board> boardList = boardService.getAllBoardList();
-//        model.addAttribute("boardList", boardList);
-//        return "board";
-//    }
 
     @PostMapping
     public void createtBoard(@RequestBody Board board) {

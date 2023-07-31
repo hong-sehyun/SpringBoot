@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,6 +15,7 @@ import edu.pnu.domain.Beach;
 import edu.pnu.service.BeachService;
 
 @RestController
+@RequestMapping("/beaches")
 public class BeachController {
     private final BeachService beachService;
 
@@ -22,8 +24,7 @@ public class BeachController {
         this.beachService = beachService;
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
-    @PostMapping("/beaches")
+    @PostMapping
     public Beach addBeachInfo(@RequestBody Beach beach) {
         return beachService.saveBeachInfo(beach);
     }
@@ -37,10 +38,9 @@ public class BeachController {
 //    public List<Beach> getAllBeachInfo() {
 //        return beachService.getAllBeachInfo();
 //    }
-    @GetMapping("/beaches")
+    @GetMapping
     public List<Beach> getBeachInfo(@RequestParam(required = false) String city1, 
                                     @RequestParam(required = false) String city2) {
-        // If both parameters are null or empty, return all beaches
         if ((city1 == null || city1.isEmpty()) && (city2 == null || city2.isEmpty())) {
             return beachService.getAllBeachInfo();
         } else {

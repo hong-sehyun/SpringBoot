@@ -24,7 +24,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Entity
 public class Board {
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id 
 	private Integer seq;
 	public String id;
 	private String beach;
