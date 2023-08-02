@@ -3,16 +3,16 @@ package edu.pnu.config.filter;
 import java.io.IOException;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 
 import edu.pnu.domain.Member;
 import edu.pnu.persistence.MemberRepository;
+import edu.pnu.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,27 +24,16 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter{
 	// 사용자 정보 읽기
 	private final MemberRepository memRepo;
 	
-//	// 인증 정보를 확인하고 인가
-//	public JWTAuthorizationFilter(AuthenticationManager authenticationManager, MemberRepository memRepo) {
-//		super(authenticationManager);
-//		this.memRepo = memRepo;
-//	}
+	@Autowired
+	private JwtService jwtService;
 	
 	
 	// 실제 필터링 작업 수행
 	@Override
 	protected void doFilterInternal(HttpServletRequest req, HttpServletResponse resp, FilterChain chain) 
 			throws IOException, ServletException {
-		String srcToken = req.getHeader("Authorization");
-		if(srcToken == null || !srcToken.startsWith("Bearer")) {
-			chain.doFilter(req, resp);
-			return;
-		}
 		
-		String jwtToken = srcToken.replace("Bearer ", "");
-		String username = JWT.require(Algorithm.HMAC256("edu.pnu.jwtkey")).build().verify(jwtToken).getClaim("username").asString();
-		// 토큰에서 얻은 id으로 사용자 찾음
-		Optional<Member> opt = memRepo.findById(username);
+		Optional<Member> opt = memRepo.findById(jwtService.getAuthUser(req));
 		if(!opt.isPresent()) {
 			chain.doFilter(req, resp);
 			return;
