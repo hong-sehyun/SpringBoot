@@ -31,7 +31,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter{
 	@Override
 	protected void doFilterInternal(HttpServletRequest req, HttpServletResponse resp, FilterChain chain) 
 			throws IOException, ServletException {
-//		요청정보에서 jwt토큰 읽어오기
+		// 요청정보에서 jwt토큰 읽어오기
 		String jwtToken = req.getHeader(HttpHeaders.AUTHORIZATION);
 		if(jwtToken == null) {
 			chain.doFilter(req, resp);
@@ -45,7 +45,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter{
 		String username = jwtService.getUsernameFromToken(srcToken);
 		
 		
-		// 읽어온 ㅏㅅ용자 이름으로 db에서 사용자 정보 읽어오기 
+		// 읽어온 사용자 이름으로 db에서 사용자 정보 읽어오기 
 		Optional<Member> opt = memRepo.findByUsername(username);
 		if(!opt.isPresent()) {
 			chain.doFilter(req, resp);
