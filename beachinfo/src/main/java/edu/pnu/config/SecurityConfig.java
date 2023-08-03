@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -19,8 +18,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.back.AuthenticationFilter;
-
+import edu.pnu.config.filter.JWTAuthorizationFilter;
+import edu.pnu.persistence.MemberRepository;
 import edu.pnu.service.JwtService;
 import edu.pnu.service.UserDetailsServiceImpl;
 
@@ -94,6 +93,9 @@ public class SecurityConfig {
 	//무한루프 수정
     @Autowired
     UserDetailsServiceImpl userDetailsService;
+    
+    @Autowired
+    MemberRepository memberRepo;
 
 //    @Bean
 //    public UserDetailsService userDetailsService() {
@@ -118,7 +120,7 @@ public class SecurityConfig {
 			.requestMatchers("/admin/**").hasRole("ADMIN")
 			.anyRequest().permitAll();
 		});
-		http.addFilterBefore(new AuthenticationFilter(jwtService), 
+		http.addFilterBefore(new JWTAuthorizationFilter(memberRepo, jwtService),  // autowired할 수 있는 객체가 아님
 				UsernamePasswordAuthenticationFilter.class);
 		
 		return http.build();

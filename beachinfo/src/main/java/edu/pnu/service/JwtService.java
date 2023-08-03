@@ -17,7 +17,7 @@ public class JwtService {
 
 	static final long EXPIRATIONTIME = 86400000;
 	
-	static final String PREFIX = "Beare";
+	static final String PREFIX = "Bearer ";
 	
 	static final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 	
@@ -31,6 +31,25 @@ public class JwtService {
 		
 		return token;
 	}
+	
+	public String getUsernameFromToken(String token) {
+		
+//		String token = req.getHeader(HttpHeaders.AUTHORIZATION);
+		if (token != null) {
+			String user = Jwts.parserBuilder()
+					.setSigningKey(key)
+					.build()
+					.parseClaimsJws(token.replace(PREFIX, ""))
+					.getBody()
+					.getSubject();
+			
+			if (user != null) 
+				return user;
+		}
+		
+		return null;
+	}
+	
 	
 	public String getAuthUser(HttpServletRequest req) {
 		String token = req.getHeader("Refresh-Token");
