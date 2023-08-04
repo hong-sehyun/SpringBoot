@@ -26,7 +26,7 @@ import lombok.ToString;
 public class Board {
 	@Id 
 	private Integer seq;
-	public String id;
+	public String username;
 	private String beach;
 	private String content;
 	@Temporal(TemporalType.TIMESTAMP)

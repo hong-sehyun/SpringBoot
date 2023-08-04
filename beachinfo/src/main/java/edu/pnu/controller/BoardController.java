@@ -3,7 +3,6 @@ package edu.pnu.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,19 +31,19 @@ public class BoardController {
         boardService.createBoard(board);
     }
 
-    @GetMapping("/{id}")
-    public Board getBoardById(@PathVariable String id) {
-        return boardService.getBoardById(id);
+    @GetMapping("/{username}")
+    public Board getBoardByUsername(@PathVariable String username) {
+        return boardService.getBoardByUsername(username);
     }
 
-    @PutMapping("/{id}")
-    public void updateBoard(@PathVariable String id, @RequestBody Board board) {
-        Board findBoard = boardService.getBoardById(id);
+    @PutMapping("/{username}")
+    public void updateBoard(@PathVariable String username, @RequestBody Board board) {
+        Board findBoard = boardService.getBoardByUsername(username);
         findBoard.setContent(board.getContent());
         boardService.updateBoard(findBoard);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{username}")
     public void deleteBoard(@PathVariable String id) {
         boardService.deleteBoard(id);
     }

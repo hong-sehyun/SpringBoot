@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.pnu.domain.Member;
 import edu.pnu.service.JwtService;
-
+import edu.pnu.service.UserDetailsServiceImpl;
 @RestController
 //@RequiredArgsConstructor
 public class LoginController {
@@ -55,6 +55,9 @@ public class LoginController {
 	@Autowired
 	AuthenticationManager authenticationManager;
 	
+	@Autowired
+	UserDetailsServiceImpl userDetailsService;
+	
 	@PostMapping("/login")
 	public ResponseEntity<?> getToken(@RequestBody Member member) {
 		
@@ -77,4 +80,11 @@ public class LoginController {
 		
 
 	}
+	
+	@PostMapping("/join")
+    public String join(@RequestBody Member member) {
+        // 회원 정보를 받아서 데이터베이스에 저장하고, 홈 페이지 등으로 리다이렉트합니다.
+        userDetailsService.saveMember(member);
+        return "redirect:/";
+    }
 }

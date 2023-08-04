@@ -22,15 +22,15 @@ public class BoardService {
         boardRepo.save(board);
     }
 
-    public Board getBoardById(String id) {
-        return boardRepo.findById(id).orElse(null);
+    public Board getBoardByUsername(String username) {
+        return boardRepo.findById(username).orElse(null);
     }
 
     public void updateBoard(Board board) {
         boardRepo.save(board);
     }
 
-    public void deleteBoard(String id) {
-        boardRepo.deleteById(id);
+    public void deleteBoard(String username) {
+        boardRepo.deleteById(username);
     }
 }
