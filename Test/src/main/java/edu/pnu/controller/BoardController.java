@@ -3,7 +3,6 @@ package edu.pnu.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,12 +27,12 @@ public class BoardController {
     }
 
     @PostMapping
-    public void createtBoard(@AuthenticationPrincipal Board board) {
+    public void createtBoard(@RequestBody Board board) {
         boardService.createBoard(board);
     }
 
     @GetMapping("/{username}")
-    public Board getBoardByUsername(@AuthenticationPrincipal String username) {
+    public Board getBoardByUsername(@PathVariable String username) {
         return boardService.getBoardByUsername(username);
     }
 

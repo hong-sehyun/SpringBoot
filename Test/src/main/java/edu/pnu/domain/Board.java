@@ -2,7 +2,6 @@ package edu.pnu.domain;
 
 import java.util.Date;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Temporal;
@@ -28,7 +27,5 @@ public class Board {
 	private String beach;
 	private String content;
 	@Temporal(TemporalType.TIMESTAMP)
-    @Column(columnDefinition = "timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP")
-    private Date createDate;
-
+	private Date createDate;
 }
