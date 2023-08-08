@@ -4,7 +4,11 @@ import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
@@ -21,8 +25,9 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name="board")
 public class Board {
-	@Id 
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer seq;
 	public String username;
 	private String beach;
@@ -30,5 +35,12 @@ public class Board {
 	@Temporal(TemporalType.TIMESTAMP)
     @Column(columnDefinition = "timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP")
     private Date createDate;
+	
+	 // Automatically set createDate before persisting
+    @PrePersist
+    protected void onCreate() {
+        createDate = new Date();
+    }
 
 }
+

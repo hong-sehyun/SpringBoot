@@ -28,24 +28,24 @@ public class BoardController {
     }
 
     @PostMapping
-    public void createtBoard(@AuthenticationPrincipal Board board) {
+    public void createtBoard(@RequestBody Board board) {
         boardService.createBoard(board);
     }
 
-    @GetMapping("/{username}")
-    public Board getBoardByUsername(@AuthenticationPrincipal String username) {
-        return boardService.getBoardByUsername(username);
-    }
+//    @GetMapping("/{username}")
+//    public Board getBoardByUsername(@AuthenticationPrincipal String username) {
+//        return boardService.getBoardByUsername(username);
+//    }
+//
+//    @PutMapping("/{username}")
+//    public void updateBoard(@PathVariable String username, @RequestBody Board board) {
+//        Board findBoard = boardService.getBoardByUsername(username);
+//        findBoard.setContent(board.getContent());
+//        boardService.updateBoard(findBoard);
+//    }
 
-    @PutMapping("/{username}")
-    public void updateBoard(@PathVariable String username, @RequestBody Board board) {
-        Board findBoard = boardService.getBoardByUsername(username);
-        findBoard.setContent(board.getContent());
-        boardService.updateBoard(findBoard);
-    }
-
-    @DeleteMapping("/{username}")
-    public void deleteBoard(@PathVariable String id) {
-        boardService.deleteBoard(id);
+    @DeleteMapping("/{seq}")
+    public void deleteBoard(@PathVariable Integer seq, @AuthenticationPrincipal Board board) {
+        boardService.deleteBoard(seq);
     }
 }
