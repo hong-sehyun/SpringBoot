@@ -22,9 +22,10 @@ public class JwtService {
 	static final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 	
 	
-	public String getToken(String username) {
+	public String getToken(String username, String role) {
 		String token = Jwts.builder()
 				.setSubject(username)
+				.claim("role", role)
 				.setExpiration(new Date(System.currentTimeMillis()+EXPIRATIONTIME))
 				.signWith(key)
 				.compact();

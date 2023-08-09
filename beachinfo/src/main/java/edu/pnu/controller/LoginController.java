@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -68,9 +69,12 @@ public class LoginController {
 						member.getPassword());	
 
 		Authentication auth = authenticationManager.authenticate(creds);
+		UserDetails userDetails = (UserDetails) auth.getPrincipal();
 
+	    // Extract role from userDetails
+	    String role = userDetails.getAuthorities().iterator().next().getAuthority();
 		// Generate token
-		String jwts = jwtService.getToken(auth.getName());
+		String jwts = jwtService.getToken(auth.getName(), role);
 
 		// Build response with the generated token
 		return ResponseEntity.ok()

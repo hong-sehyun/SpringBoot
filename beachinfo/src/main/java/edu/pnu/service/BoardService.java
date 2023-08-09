@@ -14,10 +14,11 @@ public class BoardService {
     @Autowired
     private BoardRepository boardRepo;
 
+
+    
     public List<Board> getAllBoardList() {
         return boardRepo.findAll();
     }
-
     public void createBoard(Board board) {
         boardRepo.save(board);
     }
@@ -32,5 +33,10 @@ public class BoardService {
 
     public void deleteBoard(Integer seq) {
     	boardRepo.deleteById(seq);
+    }
+    
+    public void deleteAllBoards() {
+        // Logic to delete all boards. For instance, if you're using a repository:
+        boardRepo.deleteAll();
     }
 }
