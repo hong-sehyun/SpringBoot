@@ -1,9 +1,16 @@
 package edu.pnu.controller;
 
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,6 +20,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,72 +34,148 @@ import edu.pnu.service.BoardService;
 @RestController
 @RequestMapping("/Boards")
 public class BoardController {
-    @Autowired
-    private BoardService boardService;
 
-    @GetMapping
-    public List<Board> getAllBoardList() {
-        return boardService.getAllBoardList();
-    }
+	@Value("${spring.servlet.multipart.location}")
+	private String location;
+
+
+	private String saveImage(MultipartFile image) {
+		try {
+	        if (image == null || image.isEmpty()) {
+	            return null;
+	        }
+
+	        byte[] bytes = image.getBytes();
+	        Path path = Paths.get(location + image.getOriginalFilename());
+	        Files.write(path, bytes);
+
+	        return path.toString();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return null;
+	    }
+	}
+
+	@Autowired
+	private BoardService boardService;
+
+	@GetMapping
+	public List<Board> getAllBoardList() {
+		return boardService.getAllBoardList();
+	}
 
 //    @PostMapping
 //    public void createtBoard(@RequestBody Board board) {
 //        boardService.createBoard(board);
 //    }
 
-    @PostMapping
-    public ResponseEntity<?> createBoard(@RequestParam("username") String username,
-                                         @RequestParam("beach") String beach,
-                                         @RequestParam("content") String content,
-                                         @RequestParam("image") MultipartFile image) {
-        
-        Board board = new Board();
-        board.setUsername(username);
-        board.setBeach(beach);
-        board.setContent(content);
+	@PostMapping
+	public ResponseEntity<?> createBoard(@RequestParam("username") String username, @RequestParam("beach") String beach, @RequestParam("title") String title,
+			@RequestParam("content") String content, @RequestParam(value = "image", required = false) MultipartFile image) {
 
-        // You can save the image to a directory and store its path in the database, or handle as needed.
-        // For instance:
-        String imagePath = saveImage(image); // This function should handle image saving logic.
-        board.setImagePath(imagePath);
+		Board board = new Board();
+		board.setUsername(username);
+		board.setBeach(beach);
+		board.setTitle(title);
+		board.setContent(content);
 
-        boardService.createBoard(board);
-        return ResponseEntity.ok("Board and Image uploaded successfully!");
-    }
-    
-    
+		String imagePath = saveImage(image);
+		board.setImagePath(imagePath);
+
+		boardService.createBoard(board);
+		return ResponseEntity.ok("Board and Image uploaded successfully!");
+	}
+
 //    @GetMapping("/{username}")
 //    public Board getBoardByUsername(@AuthenticationPrincipal String username) {
 //        return boardService.getBoardByUsername(username);
 //    }
 //
-//    @PutMapping("/{username}")
-//    public void updateBoard(@PathVariable String username, @RequestBody Board board) {
-//        Board findBoard = boardService.getBoardByUsername(username);
-//        findBoard.setContent(board.getContent());
-//        boardService.updateBoard(findBoard);
-//    }
+	  @PutMapping("/{seq}")
+	    public ResponseEntity<?> updateBoard(@PathVariable Integer seq, 
+	    	    @RequestParam("title") String title,
+	    	    @RequestParam("content") String content,
+	    	    @RequestParam(value = "image", required = false) MultipartFile image
+) {
+	        Optional<Board> board = boardService.getBoardBySeq(seq);
+	        if (!board.isPresent()) {
+	            return ResponseEntity.notFound().build();
+	        }
 
-    @DeleteMapping("/{seq}")
-    public void deleteBoard(@PathVariable Integer seq, @AuthenticationPrincipal Board board) {
-        boardService.deleteBoard(seq);
+	        Board findBoard = board.get();
+	        findBoard.setContent(content);
+	        findBoard.setTitle(title);
+	        if (image != null && !image.isEmpty()) {
+	            String imagePath = saveImage(image); // You need to implement this method to store the file and get the path
+	            findBoard.setImagePath(imagePath);
+	        }
+	        boardService.updateBoard(findBoard);
+
+	        return ResponseEntity.noContent().build();
+	    }
+	
+	@GetMapping("/{seq}")
+    public ResponseEntity<Board> getBoardBySeq(@PathVariable Integer seq) {
+        return boardService.getBoardBySeq(seq)
+            .map(board -> ResponseEntity.ok(board))
+            .orElse(ResponseEntity.notFound().build());
     }
-    
-    
-    
-    private boolean isAdmin() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return auth != null && auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"));
-    }
-    @DeleteMapping
-    public void deleteAllBoards(@AuthenticationPrincipal String username) {
-        // Check if user is admin
-        if (isAdmin()) {
-            boardService.deleteAllBoards();
-        } else {
-            throw new ResponseStatusException(
-              HttpStatus.FORBIDDEN, "Not authorized to delete all boards"
-            );
-        }
-    }
+	
+	@GetMapping("/{seq}/image")
+	public ResponseEntity<byte[]> getImage(@PathVariable Integer seq) {
+		try {
+	        Optional<Board> optionalBoard = boardService.getBoardBySeq(seq);
+	        
+	        if (!optionalBoard.isPresent()) {
+	            return ResponseEntity.notFound().build();
+	        }
+
+	        Board board = optionalBoard.get();
+
+	        if (board.getImagePath() == null) {
+	            return ResponseEntity.notFound().build();
+	        }
+	        
+	        Path path = Paths.get(board.getImagePath());
+	        byte[] image = Files.readAllBytes(path);
+
+	        // Determining the content type based on the file's extension
+	        String contentType = Files.probeContentType(path);
+
+	        return ResponseEntity.ok()
+	                             .contentType(MediaType.parseMediaType(contentType))
+	                             .body(image);
+	    } catch (NoSuchFileException nsfe) {
+	        return ResponseEntity.notFound().build();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	    }
+	}
+	
+	
+
+//	@DeleteMapping("/{seq}")
+//	public void deleteBoard(@PathVariable Integer seq, @AuthenticationPrincipal Board board) {
+//		boardService.deleteBoard(seq);
+//	}
+
+	@DeleteMapping("/{seq}")
+	public void deleteBoard(@PathVariable Integer seq) {
+	    boardService.deleteBoard(seq);
+	}
+	private boolean isAdmin() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		return auth != null && auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"));
+	}
+
+	@DeleteMapping
+	public void deleteAllBoards(@AuthenticationPrincipal String username) {
+		// Check if user is admin
+		if (isAdmin()) {
+			boardService.deleteAllBoards();
+		} else {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not authorized to delete all boards");
+		}
+	}
 }

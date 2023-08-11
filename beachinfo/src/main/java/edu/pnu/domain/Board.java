@@ -34,6 +34,7 @@ public class Board {
 	private Integer seq;
 	private String username;
 	private String beach;
+	private String title;
 	private String content;
 	@Temporal(TemporalType.TIMESTAMP)
     @Column(columnDefinition = "timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP")
